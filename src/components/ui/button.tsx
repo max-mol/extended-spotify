@@ -2,7 +2,7 @@ import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
   SxProps,
-  Theme
+  Theme,
 } from "@mui/material";
 import { MouseEventHandler, ReactNode } from "react";
 

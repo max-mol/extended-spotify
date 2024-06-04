@@ -1,79 +1,36 @@
 "use client";
 
-import Image from "next/image";
-import styles from "./page.module.css";
 import Button from "@/components/ui/button";
+import generateRandomString from "@/utils/generateRandomString";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  console.log(process.env.NEXT_PUBLIC_REDIRECT_URI);
+
+  const handleAuthorization = async () => {
+    const queryParams: string = new URLSearchParams({
+      response_type: "code",
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID || "",
+      scope: "user-read-private user-read-email",
+      state: generateRandomString(16),
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || "",
+    }).toString();
+
+    const authorizationUrl = `https://accounts.spotify.com/authorize?${queryParams}`;
+
+    router.replace(authorizationUrl);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <Button variant="outlined" onClick={e => console.log("signing in")}>
-          Sign in
+    <main style={{ margin: "25px" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button variant="outlined" onClick={handleAuthorization}>
+          Sign in to Spotify
         </Button>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div style={{ justifyContent: "center" }}>
+        <h1>Welcome to your vinyle collection</h1>
       </div>
     </main>
   );

@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
 interface GetTokenVariables {
-  buf: string;
   code: string;
 }
 
@@ -12,24 +11,22 @@ interface GetTokenResult {
 }
 
 export const GET_TOKEN = ({
-  buf,
   code,
-}: GetTokenVariables): Promise<AxiosResponse<GetTokenResult, any>> =>
-  axios({
+}: GetTokenVariables): Promise<AxiosResponse<GetTokenResult, any>> => {
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
+  const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string;
+  return axios({
     method: "post",
     url: "https://accounts.spotify.com/api/token",
     data: new URLSearchParams({
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || "",
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI as string,
     }).toString(),
     headers: {
       Authorization:
         "Basic " +
-        new Buffer.from(
-          process.env.NEXT_PUBLIC_CLIENT_ID +
-            ":" +
-            process.env.NEXT_PUBLIC_CLIENT_SECRET
-        ).toString("base64"),
+        new Buffer.from(clientId + ":" + clientSecret).toString("base64"),
     },
   });
+};

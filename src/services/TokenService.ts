@@ -1,4 +1,3 @@
 import { GET_TOKEN } from "./TokenServiceResource";
 
-export const getTokenQuery = async (code: string, buf: string) =>
-  GET_TOKEN({ buf: buf, code: code });
+export const getTokenQuery = async (code: string) => GET_TOKEN({ code: code });

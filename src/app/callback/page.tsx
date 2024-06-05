@@ -8,19 +8,14 @@ export default function Callback() {
   const router = useRouter();
 
   const handleGetToken = async (code: string) => {
-    const buf = window.btoa(``);
-
-    console.log(code);
-    console.log(buf);
-
-    const res = await getTokenQuery(buf, code);
+    const res = await getTokenQuery(code);
 
     if (res?.data) {
       localStorage.setItem(
         "spotifyToken",
         JSON.stringify({
           value: res.data.access_token,
-          expiry: new Date().getTime() + res.data.expires_in * 1000,
+          expiry: res.data.expires_in,
         })
       );
       router.replace("/");

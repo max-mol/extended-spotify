@@ -10,10 +10,10 @@ export default function Home() {
   const handleAuthorization = async () => {
     const queryParams: string = new URLSearchParams({
       response_type: "code",
-      client_id: process.env.NEXT_PUBLIC_CLIENT_ID || "",
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID as string,
       scope: "user-read-private user-read-email",
       state: generateRandomString(16),
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || "",
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI as string,
     }).toString();
 
     const authorizationUrl = `https://accounts.spotify.com/authorize?${queryParams}`;

@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 const getAuthorizationParams = async () => {
   const generateRandomString = (length: number) => {
@@ -31,7 +30,6 @@ const getAuthorizationParams = async () => {
 
   const authUrl = new URL("https://accounts.spotify.com/authorize");
 
-  // generated in the previous step
   window.localStorage.setItem("code_verifier", codeVerifier);
 
   const queryParams: string = new URLSearchParams({
@@ -50,8 +48,6 @@ const getAuthorizationParams = async () => {
 };
 
 export default function Home() {
-  const router = useRouter();
-
   const handleAuthorization = async () => {
     const { authUrl, queryParams } = await getAuthorizationParams();
 
@@ -66,7 +62,7 @@ export default function Home() {
           Sign in to Spotify
         </Button>
       </div>
-      <div style={{ justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <h1>Welcome</h1>
       </div>
     </main>

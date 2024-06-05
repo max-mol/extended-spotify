@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  console.log(process.env.NEXT_PUBLIC_REDIRECT_URI);
 
   const handleAuthorization = async () => {
     const queryParams: string = new URLSearchParams({
@@ -30,7 +29,7 @@ export default function Home() {
         </Button>
       </div>
       <div style={{ justifyContent: "center" }}>
-        <h1>Welcome to your vinyle collection</h1>
+        <h1>Welcome</h1>
       </div>
     </main>
   );

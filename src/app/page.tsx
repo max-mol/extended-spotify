@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 
 const getAuthorizationParams = async () => {
   const generateRandomString = (length: number) => {

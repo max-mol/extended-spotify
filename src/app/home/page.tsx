@@ -1,3 +1,3 @@
-export default function Collection() {
+export default function Home() {
   return <div>Here is a bunch of not important informations</div>;
 }

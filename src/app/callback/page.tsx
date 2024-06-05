@@ -1,33 +1,41 @@
 "use client";
 
-import { getTokenQuery } from "@/services/TokenService";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+const getToken = async (code: string) => {
+  let codeVerifier = localStorage.getItem("code_verifier") as string;
+
+  const payload = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID as string,
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI as string,
+      code_verifier: codeVerifier,
+    }),
+  };
+
+  const body = await fetch("https://accounts.spotify.com/api/token", payload);
+  const response = await body.json();
+
+  localStorage.setItem("access_token", response.access_token);
+};
 
 export default function Callback() {
   const router = useRouter();
 
-  const handleGetToken = async (code: string) => {
-    const res = await getTokenQuery(code);
-
-    if (res?.data) {
-      localStorage.setItem(
-        "spotifyToken",
-        JSON.stringify({
-          value: res.data.access_token,
-          expiry: res.data.expires_in,
-        })
-      );
-      router.replace("/");
-    }
-  };
-
   useEffect(() => {
-    const url = new URLSearchParams(window.location.search);
-    const code = url.get("code");
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get("code") as string;
 
-    if (code) handleGetToken(code);
-  }, []);
-
-  return <div>Redirecting</div>;
+    if (code) {
+      router.replace("/");
+      getToken(code);
+    }
+  });
 }

@@ -6,8 +6,10 @@ interface GetTokenVariables {
 
 interface GetTokenResult {
   access_token: string;
-  token_type: string;
+  refresh_token: string;
   expires_in: number;
+  scope: string;
+  token_type: string;
 }
 
 export const GET_TOKEN = ({
@@ -15,6 +17,7 @@ export const GET_TOKEN = ({
 }: GetTokenVariables): Promise<AxiosResponse<GetTokenResult, any>> => {
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
   const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string;
+
   return axios({
     method: "post",
     url: "https://accounts.spotify.com/api/token",
@@ -24,6 +27,7 @@ export const GET_TOKEN = ({
       redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI as string,
     }).toString(),
     headers: {
+      "content-type": "application/x-www-form-urlencoded",
       Authorization:
         "Basic " +
         new Buffer.from(clientId + ":" + clientSecret).toString("base64"),

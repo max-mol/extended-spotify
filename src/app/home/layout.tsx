@@ -2,13 +2,14 @@
 
 import Link from "@/components/ui/Link";
 import { Tabs, TabProps as MuiTabProps, Tab, Box } from "@mui/material";
+import AlbumIcon from "@mui/icons-material/Album";
 import { usePathname } from "next/navigation";
 
 const tabs = [
   {
     path: "/home",
     tab: "home",
-    label: "Home",
+    icon: <AlbumIcon fontSize="large" />,
   },
   {
     path: "/home/profile",
@@ -48,8 +49,14 @@ export default function HomeLayout({
   return (
     <Box m={2}>
       <Tabs value={tabValue} sx={{ mb: 2 }}>
-        {tabs.map(({ path, label, tab }) => (
-          <TopMenuTab key={tab} path={path} value={tab} label={label} />
+        {tabs.map(({ path, label, tab, icon }) => (
+          <TopMenuTab
+            key={tab}
+            path={path}
+            value={tab}
+            label={label}
+            icon={icon}
+          />
         ))}
       </Tabs>
       {children}

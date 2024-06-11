@@ -1,6 +1,10 @@
-import { PaletteColorOptions, createTheme } from "@mui/material";
+import {
+  PaletteColorOptions,
+  SimplePaletteColorOptions,
+  createTheme,
+} from "@mui/material";
 
-const purple: PaletteColorOptions = {
+export const purple: SimplePaletteColorOptions = {
   main: "#ab34eb",
 };
 

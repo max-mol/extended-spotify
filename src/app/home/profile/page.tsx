@@ -5,7 +5,6 @@ import UserProfile from "@/components/user/UserProfile";
 import { User } from "@/models/user/typing";
 import { getCurrentUserProfile } from "@/services/UserService";
 import { Box } from "@mui/material";
-import { ActionPathnameNormalizer } from "next/dist/server/future/normalizers/request/action";
 import { useEffect, useReducer, useRef } from "react";
 
 type UserStateAction = {

@@ -47,7 +47,7 @@ export default function HomeLayout({
 
   return (
     <Box m={2}>
-      <Tabs value={tabValue}>
+      <Tabs value={tabValue} sx={{ mb: 2 }}>
         {tabs.map(({ path, label, tab }) => (
           <TopMenuTab key={tab} path={path} value={tab} label={label} />
         ))}

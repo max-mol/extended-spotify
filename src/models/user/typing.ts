@@ -1,21 +1,13 @@
+import { ExternalUrls, Image } from "../typing";
+
 export interface ExplicitContent {
   filter_enabled: boolean;
   filter_locked: boolean;
 }
 
-export interface ExternalUrls {
-  spotify: string;
-}
-
 export interface Followers {
   href: string;
   total: number;
-}
-
-export interface Image {
-  url: string;
-  height: number;
-  width: number;
 }
 
 export interface User {

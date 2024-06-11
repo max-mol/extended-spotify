@@ -14,7 +14,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
   };
 
   return (
-    <Grid container m={5}>
+    <Grid container>
       <Grid item xs={6} display="flex" justifyContent="center">
         <Image
           alt="your face"
@@ -32,7 +32,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
             xs={6}
             display="flex"
             justifyContent="flex-end"
-            sx={{ color: purple.main }}
+            sx={{ color: purple.main, fontWeight: 700 }}
           >
             Name
           </Grid>
@@ -44,7 +44,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
             xs={6}
             display="flex"
             justifyContent="flex-end"
-            sx={{ color: purple.main }}
+            sx={{ color: purple.main, fontWeight: 700 }}
           >
             Mail
           </Grid>
@@ -56,7 +56,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
             xs={6}
             display="flex"
             justifyContent="flex-end"
-            sx={{ color: purple.main }}
+            sx={{ color: purple.main, fontWeight: 700 }}
           >
             N° of followers
           </Grid>

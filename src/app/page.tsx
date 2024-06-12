@@ -56,12 +56,12 @@ export default function Home() {
   };
 
   return (
-    <main style={{ margin: "25px" }}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+    <main>
+      {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Button variant="outlined" onClick={handleAuthorization}>
           Sign in to Spotify
         </Button>
-      </div>
+      </div> */}
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h1>Welcome</h1>
       </div>

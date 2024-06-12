@@ -32,12 +32,13 @@ const getTotalAlbumsRanges = (total: number) => {
 
 export const getAllUserSavedAlbums = async (token: string) => {
   const totalAlbums = await getUserSavedAlbumsNumber(token);
+  // const totalAlbums = 20;
 
   const albumsOffsets = getTotalAlbumsRanges(totalAlbums);
 
   const res: SavedAlbum[] = await Promise.all(
     albumsOffsets.map((offset) =>
-      getUserSavedAlbums({ token: token, limit: 50, offset: offset })
+      getUserSavedAlbums({ token: token, limit: 12, offset: offset })
     )
   )
     .then((values) => {

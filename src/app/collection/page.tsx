@@ -10,6 +10,7 @@ import { imageLoader } from "@/utils/imageLoader";
 import { getAllUserSavedAlbums } from "@/services/AlbumsService";
 import { useSnackbar } from "@/components/ui/SnackbarProvider";
 import { SavedAlbum } from "@/models/albums/typing";
+import CollectionSlider from "@/components/collection/CollectionSlider";
 
 type CollectionStateAction = {
   type: "updateCollection";
@@ -70,7 +71,10 @@ export default function Collection() {
 
   return (
     <>
-      {collectionState.collection?.map(({ album }) => (
+      {collectionState.collection && (
+        <CollectionSlider collection={collectionState.collection} />
+      )}
+      {/* {collectionState.collection?.map(({ album }) => (
         <Image
           key={album.id}
           alt={`${album.name} album cover`}
@@ -79,7 +83,7 @@ export default function Collection() {
           width={150}
           height={150}
         />
-      ))}
+      ))} */}
     </>
   );
 }

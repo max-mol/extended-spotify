@@ -47,7 +47,29 @@ export const getAllUserSavedAlbums = async (token: string) => {
         collection = [...collection, ...values[i].data.items];
       }
 
-      return collection;
+      return collection
+        .sort((a, b) => {
+          const dateA = a.album.release_date;
+          const dateB = b.album.release_date;
+          if (dateA < dateB) {
+            return -1;
+          }
+          if (dateA > dateB) {
+            return 1;
+          }
+          return 0;
+        })
+        .sort((a, b) => {
+          const nameA = a.album.artists[0].name.toUpperCase();
+          const nameB = b.album.artists[0].name.toUpperCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        });
     })
     .catch((e) => []);
 

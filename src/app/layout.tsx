@@ -60,7 +60,7 @@ const getAuthorizationParams = async () => {
 const tabs = [
   {
     path: "/",
-    tab: "home",
+    tab: "",
     icon: <AlbumIcon fontSize="large" />,
   },
   {

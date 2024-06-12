@@ -1,15 +1,15 @@
 "use client";
 
-import { useSnackbar } from "@/components/ui/SnackbarProvider";
-import { SavedAlbum, UserAlbums } from "@/models/albums/typing";
-import {
-  getAllUserSavedAlbums,
-  getUserSavedAlbums,
-} from "@/services/AlbumsService";
-import { imageLoader } from "@/utils/imageLoader";
-import { CircularProgress } from "@mui/material";
-import Image from "next/image";
 import { useEffect, useReducer, useState } from "react";
+
+import Image from "next/image";
+
+import { CircularProgress } from "@mui/material";
+
+import { imageLoader } from "@/utils/imageLoader";
+import { getAllUserSavedAlbums } from "@/services/AlbumsService";
+import { useSnackbar } from "@/components/ui/SnackbarProvider";
+import { SavedAlbum } from "@/models/albums/typing";
 
 type CollectionStateAction = {
   type: "updateCollection";
@@ -68,14 +68,18 @@ export default function Collection() {
 
   if (loading) return <CircularProgress />;
 
-  return collectionState.collection?.map(({ album }) => (
-    <Image
-      key={album.id}
-      alt={`${album.name} album cover`}
-      loader={() => imageLoader(album.images[1].url, 150)}
-      src={`${album.images[1].url}`}
-      width={150}
-      height={150}
-    />
-  ));
+  return (
+    <>
+      {collectionState.collection?.map(({ album }) => (
+        <Image
+          key={album.id}
+          alt={`${album.name} album cover`}
+          loader={() => imageLoader(album.images[1].url, 150)}
+          src={`${album.images[1].url}`}
+          width={150}
+          height={150}
+        />
+      ))}
+    </>
+  );
 }

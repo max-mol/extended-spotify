@@ -19,6 +19,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
           height={user.images[1].height}
           width={user.images[1].width}
           style={{ borderRadius: "50%" }}
+          priority
         />
       </Grid>
       <Grid item xs={6} display="flex" alignItems="center">

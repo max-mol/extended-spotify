@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Album as AlbumType, SavedAlbum } from "@/models/albums/typing";
 import { imageLoader } from "@/utils/imageLoader";
-import { Box, IconButton, Paper } from "@mui/material";
+import { Box, IconButton, Paper, Slider } from "@mui/material";
 import "./CollectionSlider.css";
 import { useEffect, useState } from "react";
 import { generateKeySync } from "crypto";
@@ -13,10 +13,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 interface AlbumProps {
   album: AlbumType;
+  size: number;
   albumClass?: string;
 }
 
-const Album = ({ album, albumClass }: AlbumProps) => {
+const Album = ({ album, size, albumClass }: AlbumProps) => {
   const [displayInfos, setDisplayInfos] = useState(false);
 
   return (
@@ -25,6 +26,7 @@ const Album = ({ album, albumClass }: AlbumProps) => {
         name={album.name}
         url={album.images[1].url}
         onClick={() => setDisplayInfos(!displayInfos)}
+        size={size}
         albumClass={albumClass}
       />
       {displayInfos && (
@@ -47,28 +49,36 @@ interface ImageAlbumProps {
   name: string;
   url: string;
   onClick: () => void;
+  size: number;
   albumClass?: string;
 }
-const ImageAlbum = ({ name, url, onClick, albumClass }: ImageAlbumProps) => (
+const ImageAlbum = ({
+  name,
+  url,
+  onClick,
+  size,
+  albumClass,
+}: ImageAlbumProps) => (
   <Image
     alt={`${name} album cover`}
     loader={() => imageLoader(url, 300)}
     src={`${url}`}
-    width={300}
-    height={300}
+    width={size}
+    height={size}
     style={{ cursor: "pointer" }}
     onClick={onClick}
     className={albumClass}
   />
 );
 
-interface CollectionSliderProps {
+interface CollectionCarouselProps {
   collection: SavedAlbum[];
 }
 
-const CollectionSlider = ({ collection }: CollectionSliderProps) => {
+const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
   const [albumsRange, setAlbumsRange] = useState({ start: 0, end: 5 });
   const [albums, setAlbums] = useState(collection.slice(0, 5));
+  const [size, setSize] = useState(215);
 
   useEffect(() => {
     const updateAlbums = () => {
@@ -78,35 +88,48 @@ const CollectionSlider = ({ collection }: CollectionSliderProps) => {
     updateAlbums();
   }, [albumsRange, collection]);
 
+  const handleChangeSize = (newSize: number) => {
+    setSize(newSize);
+  };
+
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <IconButton
-        aria-label="previous"
-        color="primary"
-        onClick={() =>
-          setAlbumsRange((prev) => ({
-            start: prev.start - 5,
-            end: prev.end - 5,
-          }))
-        }
-      >
-        <ArrowBackIosIcon />
-      </IconButton>
-      {albums.map((album) => (
-        <Album key={album.album.id} album={album.album} />
-      ))}
-      <IconButton aria-label="next" color="primary">
-        <ArrowForwardIosIcon
+    <>
+      <Slider
+        defaultValue={215}
+        min={150}
+        max={500}
+        onChange={(_, value) => handleChangeSize(value as number)}
+        sx={{ m: 5, width: "20%" }}
+      />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <IconButton
+          aria-label="previous"
+          color="primary"
           onClick={() =>
             setAlbumsRange((prev) => ({
-              start: prev.start + 5,
-              end: prev.end + 5,
+              start: prev.start - 5,
+              end: prev.end - 5,
             }))
           }
-        />
-      </IconButton>
-    </Box>
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+        {albums.map((album) => (
+          <Album key={album.album.id} size={size} album={album.album} />
+        ))}
+        <IconButton aria-label="next" color="primary">
+          <ArrowForwardIosIcon
+            onClick={() =>
+              setAlbumsRange((prev) => ({
+                start: prev.start + 5,
+                end: prev.end + 5,
+              }))
+            }
+          />
+        </IconButton>
+      </Box>
+    </>
   );
 };
 
-export default CollectionSlider;
+export default CollectionCarousel;

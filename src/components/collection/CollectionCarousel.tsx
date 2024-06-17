@@ -3,13 +3,19 @@
 import Image from "next/image";
 import { Album as AlbumType, SavedAlbum } from "@/models/albums/typing";
 import { imageLoader } from "@/utils/imageLoader";
-import { Box, IconButton, Paper, Slider } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Pagination,
+  PaginationItem,
+  Slider,
+} from "@mui/material";
 import "./CollectionSlider.css";
 import { useEffect, useState } from "react";
-import { generateKeySync } from "crypto";
-import Button from "../ui/Button";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+const alphabet = "&ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 interface AlbumProps {
   album: AlbumType;
@@ -76,9 +82,16 @@ interface CollectionCarouselProps {
 }
 
 const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
-  const [albumsRange, setAlbumsRange] = useState({ start: 0, end: 5 });
-  const [albums, setAlbums] = useState(collection.slice(0, 5));
+  const displayedAlbumNumber = 5;
+  const [albumsRange, setAlbumsRange] = useState({
+    start: 0,
+    end: displayedAlbumNumber,
+  });
+  const [albums, setAlbums] = useState(
+    collection.slice(0, displayedAlbumNumber)
+  );
   const [size, setSize] = useState(215);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const updateAlbums = () => {
@@ -86,10 +99,29 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
     };
 
     updateAlbums();
+    const alphabetIndex = alphabet.indexOf(
+      collection[albumsRange.start].album.artists[0].name[0].toUpperCase()
+    );
+    setPage(alphabetIndex !== -1 ? alphabetIndex + 1 : 1);
   }, [albumsRange, collection]);
 
   const handleChangeSize = (newSize: number) => {
     setSize(newSize);
+  };
+
+  const handleChangePage = (newPage: number) => {
+    const letter = alphabet[newPage - 1];
+    const newIndex = collection.findIndex((album) =>
+      album.album.artists[0].name.toUpperCase().startsWith(letter)
+    );
+
+    setAlbumsRange({
+      start: newIndex !== -1 ? newIndex : 0,
+      end:
+        newIndex !== -1
+          ? newIndex + displayedAlbumNumber
+          : displayedAlbumNumber,
+    });
   };
 
   return (
@@ -101,31 +133,65 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
         onChange={(_, value) => handleChangeSize(value as number)}
         sx={{ m: 5, width: "20%" }}
       />
+      <Box display="flex" justifyContent="center" m={2}>
+        <Pagination
+          count={alphabet.length}
+          page={page}
+          size="small"
+          color="primary"
+          onChange={(_, page) => handleChangePage(page)}
+          renderItem={(item) => {
+            return (
+              <PaginationItem
+                {...item}
+                page={item.page ? alphabet[item.page - 1] : "..."}
+                sx={{ color: "white", fontColor: "white" }}
+              />
+            );
+          }}
+        />
+      </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <IconButton
           aria-label="previous"
           color="primary"
           onClick={() =>
             setAlbumsRange((prev) => ({
-              start: prev.start - 5,
-              end: prev.end - 5,
+              start:
+                prev.start - displayedAlbumNumber >= 0
+                  ? prev.start - displayedAlbumNumber
+                  : 0,
+              end:
+                prev.start - displayedAlbumNumber >= 0
+                  ? prev.end - displayedAlbumNumber
+                  : displayedAlbumNumber,
             }))
           }
+          disabled={albumsRange.start <= 0}
         >
           <ArrowBackIosIcon />
         </IconButton>
         {albums.map((album) => (
           <Album key={album.album.id} size={size} album={album.album} />
         ))}
-        <IconButton aria-label="next" color="primary">
-          <ArrowForwardIosIcon
-            onClick={() =>
-              setAlbumsRange((prev) => ({
-                start: prev.start + 5,
-                end: prev.end + 5,
-              }))
-            }
-          />
+        <IconButton
+          aria-label="next"
+          color="primary"
+          onClick={() =>
+            setAlbumsRange((prev) => ({
+              start:
+                prev.end + displayedAlbumNumber < collection.length
+                  ? prev.start + displayedAlbumNumber
+                  : collection.length - displayedAlbumNumber,
+              end:
+                prev.end + displayedAlbumNumber < collection.length
+                  ? prev.end + displayedAlbumNumber
+                  : collection.length,
+            }))
+          }
+          disabled={albumsRange.end >= collection.length}
+        >
+          <ArrowForwardIosIcon />
         </IconButton>
       </Box>
     </>

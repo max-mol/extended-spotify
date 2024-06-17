@@ -74,16 +74,6 @@ export default function Collection() {
       {collectionState.collection && (
         <CollectionCarousel collection={collectionState.collection} />
       )}
-      {/* {collectionState.collection?.map(({ album }) => (
-        <Image
-          key={album.id}
-          alt={`${album.name} album cover`}
-          loader={() => imageLoader(album.images[1].url, 150)}
-          src={`${album.images[1].url}`}
-          width={150}
-          height={150}
-        />
-      ))} */}
     </>
   );
 }

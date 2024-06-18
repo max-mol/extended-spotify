@@ -151,7 +151,7 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
           }}
         />
       </Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box display="flex" justifyContent="space-between">
         <IconButton
           aria-label="previous"
           color="primary"

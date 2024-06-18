@@ -14,6 +14,8 @@ import "./CollectionSlider.css";
 import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import InfosAlbum from "./InfosAlbum";
+import { purple } from "@/libs/theme/light";
 
 const alphabet = "&ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -27,7 +29,7 @@ const Album = ({ album, size, albumClass }: AlbumProps) => {
   const [displayInfos, setDisplayInfos] = useState(false);
 
   return (
-    <Box>
+    <Box width={size}>
       <ImageAlbum
         name={album.name}
         url={album.images[1].url}
@@ -36,15 +38,13 @@ const Album = ({ album, size, albumClass }: AlbumProps) => {
         albumClass={albumClass}
       />
       {displayInfos && (
-        <Box>
-          <div>{album.name}</div>
-          <div>{album.release_date.slice(0, 4)}</div>
-          <div>{album.album_type}</div>
-          <div>{album.label}</div>
-          {album.genres.map((genre) => (
-            <div key={genre}>{genre}</div>
-          ))}
-          <div>{album.artists[0].name}</div>
+        <Box
+          sx={{
+            border: `1px solid ${purple.main}`,
+            borderRadius: "0 0 15px 15px",
+          }}
+        >
+          <InfosAlbum album={album} />
         </Box>
       )}
     </Box>
@@ -131,7 +131,7 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
         min={150}
         max={500}
         onChange={(_, value) => handleChangeSize(value as number)}
-        sx={{ m: 5, width: "20%" }}
+        sx={{ ml: 5, mt: 5, mr: 5, width: "20%" }}
       />
       <Box display="flex" justifyContent="center" m={2}>
         <Pagination

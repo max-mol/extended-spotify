@@ -5,20 +5,24 @@ import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
 
 import { CircularProgress } from "@mui/material";
-
+import _uniq from "lodash/uniq";
 import { imageLoader } from "@/utils/imageLoader";
 import { getAllUserSavedAlbums } from "@/services/AlbumsService";
 import { useSnackbar } from "@/components/ui/SnackbarProvider";
 import { SavedAlbum } from "@/models/albums/typing";
 import CollectionCarousel from "@/components/collection/CollectionCarousel";
+import { getSeveralArtists } from "@/services/ArtistsService";
 
-type CollectionStateAction = {
-  type: "updateCollection";
-  collection: SavedAlbum[];
-};
+type CollectionStateAction =
+  | {
+      type: "updateCollection";
+      collection: SavedAlbum[];
+    }
+  | { type: "updateGenres"; genres: string[] };
 
 type CollectionLocalState = {
   collection?: SavedAlbum[];
+  genres?: string[];
 };
 
 function collectionReducer(
@@ -29,6 +33,12 @@ function collectionReducer(
     return {
       ...state,
       collection: action.collection,
+    };
+  }
+  if (action.type === "updateGenres") {
+    return {
+      ...state,
+      genres: action.genres,
     };
   }
   return state;
@@ -50,6 +60,29 @@ export default function Collection() {
       setLoading(true);
       try {
         const res = await getAllUserSavedAlbums(token);
+        const artists = res.map((album) => album.album.artists[0].id);
+        let genres: string[] = [];
+
+        const artistsRes = await getSeveralArtists({
+          listIds: _uniq(artists),
+          token,
+        });
+
+        res.forEach((album) => {
+          const genre = artistsRes.find(
+            (artist) => artist.id === album.album.artists[0].id
+          )?.genres;
+
+          if (genre) {
+            album.album.genres = genre;
+            genres = [...genres, ...genre];
+          }
+        });
+
+        dispatchCollectionStateAction({
+          type: "updateGenres",
+          genres: _uniq(genres),
+        });
         dispatchCollectionStateAction({
           type: "updateCollection",
           collection: res,
@@ -72,7 +105,10 @@ export default function Collection() {
   return (
     <>
       {collectionState.collection && (
-        <CollectionCarousel collection={collectionState.collection} />
+        <CollectionCarousel
+          collection={collectionState.collection}
+          genres={collectionState.genres}
+        />
       )}
     </>
   );

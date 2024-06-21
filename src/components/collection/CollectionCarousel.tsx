@@ -4,11 +4,13 @@ import Image from "next/image";
 import { Album as AlbumType, SavedAlbum } from "@/models/albums/typing";
 import { imageLoader } from "@/utils/imageLoader";
 import {
+  Autocomplete,
   Box,
   IconButton,
   Pagination,
   PaginationItem,
   Slider,
+  TextField,
 } from "@mui/material";
 import "./CollectionSlider.css";
 import { useEffect, useState } from "react";
@@ -79,9 +81,13 @@ const ImageAlbum = ({
 
 interface CollectionCarouselProps {
   collection: SavedAlbum[];
+  genres?: string[];
 }
 
-const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
+const CollectionCarousel = ({
+  collection,
+  genres = [],
+}: CollectionCarouselProps) => {
   const displayedAlbumNumber = 5;
   const [albumsRange, setAlbumsRange] = useState({
     start: 0,
@@ -92,6 +98,7 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
   );
   const [size, setSize] = useState(215);
   const [page, setPage] = useState(1);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
   useEffect(() => {
     const updateAlbums = () => {
@@ -126,13 +133,29 @@ const CollectionCarousel = ({ collection }: CollectionCarouselProps) => {
 
   return (
     <>
-      <Slider
-        defaultValue={215}
-        min={150}
-        max={500}
-        onChange={(_, value) => handleChangeSize(value as number)}
-        sx={{ ml: 5, mt: 5, mr: 5, width: "20%" }}
-      />
+      <Box display="flex" alignItems="center" mt={5}>
+        <Slider
+          defaultValue={215}
+          min={150}
+          max={500}
+          onChange={(_, value) => handleChangeSize(value as number)}
+          sx={{ ml: 5, mr: 5, width: "20%" }}
+        />
+        <Autocomplete
+          multiple
+          value={selectedGenres}
+          onChange={(_, values) => {
+            setSelectedGenres(values);
+          }}
+          options={genres}
+          sx={{
+            ml: 5,
+            mr: 5,
+            minWidth: "25%",
+          }}
+          renderInput={(params) => <TextField {...params} label="Genres" />}
+        />
+      </Box>
       <Box display="flex" justifyContent="center" m={2}>
         <Pagination
           count={alphabet.length}

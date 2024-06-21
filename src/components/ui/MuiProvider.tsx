@@ -1,5 +1,9 @@
 import theme from "@/libs/theme/light";
-import { StyledEngineProvider, ThemeProvider } from "@mui/material";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
 import { ReactNode } from "react";
 import SnackbarProvider from "./SnackbarProvider";
 

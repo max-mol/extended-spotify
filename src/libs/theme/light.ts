@@ -1,16 +1,15 @@
-import {
-  PaletteColorOptions,
-  SimplePaletteColorOptions,
-  createTheme,
-} from "@mui/material";
-
-export const purple: SimplePaletteColorOptions = {
-  main: "#ab34eb",
-};
+import { createTheme } from "@mui/material";
+import { purple } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
-    primary: purple,
+    mode: "dark",
+    primary: {
+      main: purple[700],
+    },
+    secondary: {
+      main: purple[50],
+    },
   },
 });
 

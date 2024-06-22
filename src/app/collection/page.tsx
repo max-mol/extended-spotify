@@ -2,8 +2,6 @@
 
 import { useEffect, useReducer, useState } from "react";
 
-import Image from "next/image";
-
 import { CircularProgress } from "@mui/material";
 import _uniq from "lodash/uniq";
 import { imageLoader } from "@/utils/imageLoader";

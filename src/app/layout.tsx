@@ -6,9 +6,11 @@ import MuiProvider from "@/components/ui/MuiProvider";
 import { ReactNode } from "react";
 import Button from "@/components/ui/Button";
 import Link from "@/components/ui/Link";
-import { Tabs, TabProps as MuiTabProps, Tab, Box } from "@mui/material";
+import { Tabs, TabProps as MuiTabProps, Tab, Box, Grid } from "@mui/material";
 import AlbumIcon from "@mui/icons-material/Album";
 import { usePathname } from "next/navigation";
+import MusicPlayerSlider from "@/components/ui/MusicPlayerSlider";
+import useCurrentlyPlayingTrackData from "./useCurrentlyPlayingTrackData";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -111,6 +113,8 @@ export default function RootLayout({
     );
   };
 
+  const { item } = useCurrentlyPlayingTrackData();
+
   return (
     <html lang="en">
       <body className={inter.className} style={{ margin: "25px" }}>
@@ -120,17 +124,25 @@ export default function RootLayout({
               Sign in to Spotify
             </Button>
           </div>
-          <Tabs value={tabValue} sx={{ mb: 2 }}>
-            {tabs.map(({ path, label, tab, icon }) => (
-              <TopMenuTab
-                key={tab}
-                path={path}
-                value={tab}
-                label={label}
-                icon={icon}
-              />
-            ))}
-          </Tabs>
+          <Grid container>
+            <Grid item xs={4}>
+              <Tabs value={tabValue} sx={{ mb: 2 }}>
+                {tabs.map(({ path, label, tab, icon }) => (
+                  <TopMenuTab
+                    key={tab}
+                    path={path}
+                    value={tab}
+                    label={label}
+                    icon={icon}
+                  />
+                ))}
+              </Tabs>
+            </Grid>
+            <Grid item xs={4}>
+              <MusicPlayerSlider item={item} />
+            </Grid>
+            <Grid item xs={4} />
+          </Grid>
           {children}
         </MuiProvider>
       </body>

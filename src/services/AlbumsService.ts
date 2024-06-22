@@ -38,7 +38,7 @@ export const getAllUserSavedAlbums = async (token: string) => {
 
   const res: SavedAlbum[] = await Promise.all(
     albumsOffsets.map((offset) =>
-      getUserSavedAlbums({ token: token, limit: 12, offset: offset })
+      getUserSavedAlbums({ token: token, limit: 50, offset: offset })
     )
   )
     .then((values) => {

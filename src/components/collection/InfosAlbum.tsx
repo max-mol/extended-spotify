@@ -1,14 +1,22 @@
 import { Album } from "@/models/albums/typing";
 import { Box, Grid, IconButton } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { SimplifiedTrack, Tracks } from "@/models/tracks/typing";
+import { playTrack } from "@/services/PlayerService";
 
 interface InfosAlbumProps {
   album: Album;
 }
 
 const InfosAlbum = ({ album }: InfosAlbumProps) => {
-  const handleClickPlay = () => {
-    console.log("play");
+  const token = localStorage.getItem("access_token") as string;
+
+  const handleClickPlay = async (album: Album, track: SimplifiedTrack) => {
+    await playTrack({
+      contextUri: album.uri,
+      token: token,
+      trackContextPosition: track.track_number,
+    });
   };
 
   return (
@@ -27,7 +35,10 @@ const InfosAlbum = ({ album }: InfosAlbumProps) => {
         <Grid item xs={12} mb={1}>
           {album.tracks.items.map((track) => (
             <Box key={track.id} display="flex" alignItems="center">
-              <IconButton size="small" onClick={handleClickPlay}>
+              <IconButton
+                size="small"
+                onClick={() => handleClickPlay(album, track)}
+              >
                 <PlayCircleIcon color="primary" />
               </IconButton>
               <div key={track.id}>{track.name}</div>

@@ -45,7 +45,8 @@ const getAuthorizationParams = async () => {
   const queryParams: string = new URLSearchParams({
     response_type: "code",
     client_id: process.env.NEXT_PUBLIC_CLIENT_ID as string,
-    scope: "user-read-private user-read-email user-library-read",
+    scope:
+      "user-read-private user-read-email user-library-read app-remote-control streaming user-read-playback-state user-modify-playback-state",
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
     redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI as string,

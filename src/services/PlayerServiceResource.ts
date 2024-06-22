@@ -59,6 +59,55 @@ export const RESUME_PLAYBACK = async ({ token }: ResumePlaybackVariables) => {
   });
 };
 
+export interface SkipToNextVariables {
+  token: string;
+}
+
+export const SKIP_TO_NEXT = async ({ token }: SkipToNextVariables) => {
+  return axios({
+    method: "post",
+    url: "https://api.spotify.com/v1/me/player/next",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export interface SkipToPreviousVariables {
+  token: string;
+}
+
+export const SKIP_TO_PREVIOUS = async ({ token }: SkipToPreviousVariables) => {
+  return axios({
+    method: "post",
+    url: "https://api.spotify.com/v1/me/player/previous",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export interface SetPlaybackVolumeVariables {
+  token: string;
+  volume: number;
+}
+
+export const SET_PLAYBACK_VOLUME = async ({
+  token,
+  volume,
+}: SetPlaybackVolumeVariables) => {
+  return axios({
+    method: "put",
+    url: "https://api.spotify.com/v1/me/player/volume",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      volume_percent: volume,
+    },
+  });
+};
+
 export interface GetCurrentlyPlayingTrackVariables {
   token: string;
 }

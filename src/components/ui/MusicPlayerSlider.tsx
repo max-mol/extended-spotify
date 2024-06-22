@@ -14,7 +14,13 @@ import VolumeDownRounded from "@mui/icons-material/VolumeDownRounded";
 import Image from "next/image";
 import { Track } from "@/models/tracks/typing";
 import { imageLoader } from "@/utils/imageLoader";
-import { pausePlayback, resumePlayback } from "@/services/PlayerService";
+import {
+  pausePlayback,
+  resumePlayback,
+  setPlaybackVolume,
+  skipToNext,
+  skipToPrevious,
+} from "@/services/PlayerService";
 
 // const WallPaper = styled("div")({
 //   position: "absolute",
@@ -104,9 +110,17 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
   const handlePausePlayback = async () => {
     await pausePlayback({ token });
   };
-
   const handleResumePlayback = async () => {
     await resumePlayback({ token });
+  };
+  const handleSkipToNext = async () => {
+    await skipToNext({ token });
+  };
+  const handleSkipToPrevious = async () => {
+    await skipToPrevious({ token });
+  };
+  const handleSetVolume = async (volume: number) => {
+    await setPlaybackVolume({ token, volume });
   };
 
   if (!item) return;
@@ -194,7 +208,7 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
             mt: -1,
           }}
         >
-          <IconButton aria-label="previous song">
+          <IconButton aria-label="previous song" onClick={handleSkipToPrevious}>
             <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
           <IconButton
@@ -220,7 +234,7 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
               />
             )}
           </IconButton>
-          <IconButton aria-label="next song">
+          <IconButton aria-label="next song" onClick={handleSkipToNext}>
             <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
         </Box>
@@ -234,6 +248,7 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
           <Slider
             aria-label="Volume"
             defaultValue={30}
+            onChange={(_, value) => handleSetVolume(value as number)}
             sx={{
               color:
                 theme.palette.mode === "dark" ? "#fff" : "rgba(0,0,0,0.87)",

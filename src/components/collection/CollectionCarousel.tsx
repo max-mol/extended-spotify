@@ -17,7 +17,9 @@ import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import InfosAlbum from "./InfosAlbum";
-import { purple } from "@/libs/theme/light";
+import theme from "@/libs/theme/light";
+import _intersection from "lodash/intersection";
+import useCollectionData from "./useCollectionData";
 
 const alphabet = "&ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -42,7 +44,7 @@ const Album = ({ album, size, albumClass }: AlbumProps) => {
       {displayInfos && (
         <Box
           sx={{
-            border: `1px solid ${purple.main}`,
+            border: `1px solid ${theme.palette.primary.main}`,
             borderRadius: "0 0 15px 15px",
           }}
         >
@@ -93,24 +95,36 @@ const CollectionCarousel = ({
     start: 0,
     end: displayedAlbumNumber,
   });
-  const [albums, setAlbums] = useState(
-    collection.slice(0, displayedAlbumNumber)
-  );
   const [size, setSize] = useState(215);
   const [page, setPage] = useState(1);
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+
+  const handleResetAlbumsRange = () => {
+    setAlbumsRange({
+      start: 0,
+      end: displayedAlbumNumber,
+    });
+  };
+
+  const { filteredCollection, handleFilterByGenresCollection } =
+    useCollectionData({ collection, onResetPage: handleResetAlbumsRange });
+
+  const [albums, setAlbums] = useState(
+    filteredCollection.slice(0, displayedAlbumNumber)
+  );
 
   useEffect(() => {
     const updateAlbums = () => {
-      setAlbums(collection.slice(albumsRange.start, albumsRange.end));
+      setAlbums(filteredCollection.slice(albumsRange.start, albumsRange.end));
     };
 
     updateAlbums();
     const alphabetIndex = alphabet.indexOf(
-      collection[albumsRange.start].album.artists[0].name[0].toUpperCase()
+      filteredCollection[
+        albumsRange.start
+      ].album.artists[0].name[0].toUpperCase()
     );
     setPage(alphabetIndex !== -1 ? alphabetIndex + 1 : 1);
-  }, [albumsRange, collection]);
+  }, [albumsRange, filteredCollection]);
 
   const handleChangeSize = (newSize: number) => {
     setSize(newSize);
@@ -118,7 +132,7 @@ const CollectionCarousel = ({
 
   const handleChangePage = (newPage: number) => {
     const letter = alphabet[newPage - 1];
-    const newIndex = collection.findIndex((album) =>
+    const newIndex = filteredCollection.findIndex((album) =>
       album.album.artists[0].name.toUpperCase().startsWith(letter)
     );
 
@@ -143,9 +157,9 @@ const CollectionCarousel = ({
         />
         <Autocomplete
           multiple
-          value={selectedGenres}
+          defaultValue={[]}
           onChange={(_, values) => {
-            setSelectedGenres(values);
+            handleFilterByGenresCollection(values);
           }}
           options={genres}
           sx={{
@@ -203,16 +217,16 @@ const CollectionCarousel = ({
           onClick={() =>
             setAlbumsRange((prev) => ({
               start:
-                prev.end + displayedAlbumNumber < collection.length
+                prev.end + displayedAlbumNumber < filteredCollection.length
                   ? prev.start + displayedAlbumNumber
-                  : collection.length - displayedAlbumNumber,
+                  : filteredCollection.length - displayedAlbumNumber,
               end:
-                prev.end + displayedAlbumNumber < collection.length
+                prev.end + displayedAlbumNumber < filteredCollection.length
                   ? prev.end + displayedAlbumNumber
-                  : collection.length,
+                  : filteredCollection.length,
             }))
           }
-          disabled={albumsRange.end >= collection.length}
+          disabled={albumsRange.end >= filteredCollection.length}
         >
           <ArrowForwardIosIcon />
         </IconButton>

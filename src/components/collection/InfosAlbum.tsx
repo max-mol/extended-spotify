@@ -34,11 +34,17 @@ const InfosAlbum = ({ album }: InfosAlbumProps) => {
             </Box>
           ))}
         </Grid>
-        <div>{album.label}</div>
-        <div>{album.album_type}</div>
-        {album.genres.map((genre) => (
-          <div key={genre}>{genre}</div>
-        ))}
+        <Grid item xs={12}>
+          <div>{album.label}</div>
+        </Grid>
+        <Grid item xs={12}>
+          <div>{album.album_type}</div>
+        </Grid>
+        <Box mt={1}>
+          {album.genres.map((genre) => (
+            <div key={genre}>{genre}</div>
+          ))}
+        </Box>
       </Grid>
     </Box>
   );

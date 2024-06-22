@@ -78,7 +78,6 @@ export default function Collection() {
             genres = [...genres, ...genre];
           }
         });
-
         dispatchCollectionStateAction({
           type: "updateGenres",
           genres: _uniq(genres),

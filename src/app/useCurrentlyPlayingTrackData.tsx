@@ -11,7 +11,6 @@ const useCurrentlyPlayingTrackData = (): { item?: Track } => {
     const handleGetTrack = async () => {
       const res = await getCurrentlyPlayingTrack({ token });
 
-      console.log(res);
       setItem(res.data.item);
     };
 

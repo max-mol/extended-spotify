@@ -22,6 +22,8 @@ import {
   skipToPrevious,
 } from "@/services/PlayerService";
 
+import "./MusicPlayerSlider.css";
+
 // const WallPaper = styled("div")({
 //   position: "absolute",
 //   width: "100%",
@@ -73,7 +75,7 @@ const CoverImage = styled("div")({
   objectFit: "cover",
   overflow: "hidden",
   flexShrink: 0,
-  borderRadius: 8,
+  borderRadius: 50,
   backgroundColor: "rgba(0,0,0,0.08)",
   "& > img": {
     width: "100%",
@@ -129,7 +131,7 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
     <Box sx={{ overflow: "hidden" }}>
       <Widget>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <CoverImage>
+          <CoverImage className="rotate">
             <Image
               alt="playing album cover"
               src={item.album.images[0].url}

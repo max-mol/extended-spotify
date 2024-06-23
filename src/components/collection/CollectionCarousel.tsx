@@ -84,11 +84,13 @@ const ImageAlbum = ({
 interface CollectionCarouselProps {
   collection: SavedAlbum[];
   genres?: string[];
+  releaseDates?: string[];
 }
 
 const CollectionCarousel = ({
   collection,
   genres = [],
+  releaseDates = [],
 }: CollectionCarouselProps) => {
   const displayedAlbumNumber = 5;
   const [albumsRange, setAlbumsRange] = useState({
@@ -105,8 +107,11 @@ const CollectionCarousel = ({
     });
   };
 
-  const { filteredCollection, handleFilterByGenresCollection } =
-    useCollectionData({ collection, onResetPage: handleResetAlbumsRange });
+  const {
+    filteredCollection,
+    handleFilterByGenresCollection,
+    handleFilterByDatesCollection,
+  } = useCollectionData({ collection, onResetPage: handleResetAlbumsRange });
 
   const [albums, setAlbums] = useState(
     filteredCollection.slice(0, displayedAlbumNumber)
@@ -118,12 +123,18 @@ const CollectionCarousel = ({
     };
 
     updateAlbums();
-    const alphabetIndex = alphabet.indexOf(
-      filteredCollection[
-        albumsRange.start
-      ].album.artists[0].name[0].toUpperCase()
-    );
-    setPage(alphabetIndex !== -1 ? alphabetIndex + 1 : 1);
+
+    if (
+      filteredCollection.length > 0 &&
+      filteredCollection[albumsRange.start]
+    ) {
+      const alphabetIndex = alphabet.indexOf(
+        filteredCollection[
+          albumsRange.start
+        ].album.artists[0].name[0].toUpperCase()
+      );
+      setPage(alphabetIndex !== -1 ? alphabetIndex + 1 : 1);
+    }
   }, [albumsRange, filteredCollection]);
 
   const handleChangeSize = (newSize: number) => {
@@ -168,6 +179,22 @@ const CollectionCarousel = ({
             minWidth: "25%",
           }}
           renderInput={(params) => <TextField {...params} label="Genres" />}
+        />
+        <Autocomplete
+          multiple
+          defaultValue={[]}
+          onChange={(_, values) => {
+            handleFilterByDatesCollection(values);
+          }}
+          options={releaseDates}
+          sx={{
+            ml: 5,
+            mr: 5,
+            minWidth: "15%",
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Release dates" />
+          )}
         />
       </Box>
       <Box display="flex" justifyContent="center" m={2}>

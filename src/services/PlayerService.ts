@@ -8,9 +8,11 @@ import {
   RESUME_PLAYBACK,
   ResumePlaybackVariables,
   SET_PLAYBACK_VOLUME,
+  SET_REPEAT_STATE,
   SKIP_TO_NEXT,
   SKIP_TO_PREVIOUS,
   SetPlaybackVolumeVariables,
+  SetRepeatStateVariables,
   SkipToNextVariables,
   SkipToPreviousVariables,
 } from "./PlayerServiceResource";
@@ -39,3 +41,8 @@ export const getCurrentlyPlayingTrack = ({
   token,
 }: GetCurrentlyPlayingTrackVariables) =>
   GET_CURRRENTLY_PLAYING_TRACK({ token });
+
+export const setRepeatState = ({
+  token,
+  repeatState,
+}: SetRepeatStateVariables) => SET_REPEAT_STATE({ token, repeatState });

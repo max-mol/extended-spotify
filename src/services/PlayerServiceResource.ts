@@ -1,4 +1,4 @@
-import { Actions, Context, Device } from "@/models/player/typing";
+import { Actions, Context, Device, RepeatStates } from "@/models/player/typing";
 import { Track } from "@/models/tracks/typing";
 import axios, { AxiosResponse } from "axios";
 
@@ -102,7 +102,7 @@ export const SET_PLAYBACK_VOLUME = async ({
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    data: {
+    params: {
       volume_percent: volume,
     },
   });
@@ -114,7 +114,7 @@ export interface GetCurrentlyPlayingTrackVariables {
 
 export interface GetCurrentlyPlayingTrackResult {
   device: Device;
-  repeat_state: string;
+  repeat_state: RepeatStates;
   shuffle_state: boolean;
   context: Context;
   timestamp: number;
@@ -136,5 +136,24 @@ export const GET_CURRRENTLY_PLAYING_TRACK = async ({
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  });
+};
+
+export interface SetRepeatStateVariables {
+  token: string;
+  repeatState: RepeatStates;
+}
+
+export const SET_REPEAT_STATE = async ({
+  token,
+  repeatState,
+}: SetRepeatStateVariables) => {
+  return axios({
+    method: "put",
+    url: "https://api.spotify.com/v1/me/player/repeat",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: { state: repeatState },
   });
 };

@@ -18,10 +18,19 @@ import {
   pausePlayback,
   resumePlayback,
   setPlaybackVolume,
+  setRepeatState,
   skipToNext,
   skipToPrevious,
 } from "@/services/PlayerService";
 
+import useCurrentlyPlayingTrackData from "@/app/useCurrentlyPlayingTrackData";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { RepeatStates } from "@/models/player/typing";
+import { useState } from "react";
+import ReplayCircleFilledIcon from "@mui/icons-material/ReplayCircleFilled";
+import ReplayIcon from "@mui/icons-material/Replay";
+import _throttle from "lodash/throttle";
+import { useSnackbar } from "./SnackbarProvider";
 import "./MusicPlayerSlider.css";
 
 // const WallPaper = styled("div")({
@@ -89,17 +98,14 @@ const CoverImage = styled("div")({
 //   letterSpacing: 0.2,
 // });
 
-interface MusicPlayerSliderProps {
-  item?: Track;
-}
+interface MusicPlayerSliderProps {}
 
-export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
-  const token = localStorage.getItem("access_token") as string;
-
+export default function MusicPlayerSlider({}: MusicPlayerSliderProps) {
+  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   // const duration = 200; // seconds
   // const [position, setPosition] = React.useState(32);
-  const [paused, setPaused] = React.useState(false);
+  const [paused, setPaused] = useState(false);
   // function formatDuration(value: number) {
   //   const minute = Math.floor(value / 60);
   //   const secondLeft = value - minute * 60;
@@ -109,20 +115,59 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
   const lightIconColor =
     theme.palette.mode === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
 
+  const token = localStorage.getItem("access_token") as string;
+
+  const [localRepeatState, setLocalRepeatState] =
+    useState<RepeatStates>("context");
+
+  const { item, updateTrack } = useCurrentlyPlayingTrackData();
+
   const handlePausePlayback = async () => {
     await pausePlayback({ token });
+    await updateTrack();
   };
   const handleResumePlayback = async () => {
     await resumePlayback({ token });
+    await updateTrack();
   };
   const handleSkipToNext = async () => {
     await skipToNext({ token });
+    setTimeout(async () => {
+      await updateTrack();
+    }, 500);
   };
   const handleSkipToPrevious = async () => {
     await skipToPrevious({ token });
+    setTimeout(async () => {
+      await updateTrack();
+    }, 500);
   };
-  const handleSetVolume = async (volume: number) => {
-    await setPlaybackVolume({ token, volume });
+  const handleSetVolume = _throttle(async (volume: number) => {
+    try {
+      await setPlaybackVolume({ token, volume });
+      await updateTrack();
+    } catch (e) {
+      enqueueSnackbar("error", "Volume can't be adjusted from here");
+    }
+  }, 1000);
+  const handleSetRepeatMode = async () => {
+    let newRepeatState: RepeatStates = "off";
+    if (localRepeatState === "off") {
+      newRepeatState = "track";
+    }
+    if (localRepeatState === "track") {
+      newRepeatState = "context";
+    }
+    if (localRepeatState === "context") {
+      newRepeatState = "off";
+    }
+    try {
+      await setRepeatState({ token, repeatState: newRepeatState });
+      setLocalRepeatState(newRepeatState);
+    } catch (e) {}
+    setTimeout(async () => {
+      await updateTrack();
+    }, 500);
   };
 
   if (!item) return;
@@ -133,7 +178,7 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <CoverImage className="rotate">
             <Image
-              alt="playing album cover"
+              alt={`${item.album.name} album cover`}
               src={item.album.images[0].url}
               width={100}
               height={100}
@@ -151,8 +196,16 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
             <Typography noWrap>
               <b>{item.album.name}</b>
             </Typography>
-            <Typography noWrap letterSpacing={-0.25}>
+            <Typography
+              noWrap
+              letterSpacing={-0.25}
+              display="flex"
+              alignItems="center"
+            >
               {item.name}
+              <IconButton onClick={updateTrack}>
+                <RefreshIcon sx={{ fontSize: "22px" }} />
+              </IconButton>
             </Typography>
           </Box>
         </Box>
@@ -238,6 +291,17 @@ export default function MusicPlayerSlider({ item }: MusicPlayerSliderProps) {
           </IconButton>
           <IconButton aria-label="next song" onClick={handleSkipToNext}>
             <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
+          </IconButton>
+          <IconButton onClick={handleSetRepeatMode}>
+            {localRepeatState === "off" && (
+              <ReplayIcon fontSize="medium" htmlColor={mainIconColor} />
+            )}
+            {localRepeatState === "track" && (
+              <ReplayIcon fontSize="medium" color="primary" />
+            )}
+            {localRepeatState === "context" && (
+              <ReplayCircleFilledIcon fontSize="medium" color="primary" />
+            )}
           </IconButton>
         </Box>
         <Stack

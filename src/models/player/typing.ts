@@ -1,5 +1,7 @@
 import { ExternalUrls } from "../typing";
 
+export type RepeatStates = "off" | "track" | "context";
+
 export interface Device {
   id: string | null;
   is_active: boolean;

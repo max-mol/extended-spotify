@@ -113,8 +113,6 @@ export default function RootLayout({
     );
   };
 
-  const { item } = useCurrentlyPlayingTrackData();
-
   return (
     <html lang="en">
       <body className={inter.className} style={{ margin: "25px" }}>
@@ -139,7 +137,7 @@ export default function RootLayout({
               </Tabs>
             </Grid>
             <Grid item xs={4}>
-              <MusicPlayerSlider item={item} />
+              <MusicPlayerSlider />
             </Grid>
             <Grid item xs={4} />
           </Grid>

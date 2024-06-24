@@ -76,6 +76,11 @@ const tabs = [
     tab: "collection",
     label: "Collection",
   },
+  {
+    path: "/ranks",
+    tab: "ranks",
+    label: "Ranks",
+  },
 ];
 
 interface TopMenuTabProps extends MuiTabProps {

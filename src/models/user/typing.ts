@@ -24,3 +24,7 @@ export interface User {
   type: string;
   uri: string;
 }
+
+export type TypeItem = "artists" | "tracks";
+
+export type TimeRangeItem = "short_term" | "medium_term" | "long_term";

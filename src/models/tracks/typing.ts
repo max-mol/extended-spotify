@@ -2,7 +2,7 @@ import { Album } from "../albums/typing";
 import { Artist, SimplifiedArtist } from "../artists/typing";
 import { ExternalIds, ExternalUrls, Restrictions } from "../typing";
 
-export interface Tracks {
+export interface SimplifiedTracks {
   href: string;
   limit: number;
   next: string | null;
@@ -30,6 +30,16 @@ export interface SimplifiedTrack {
   type: string;
   uri: string;
   is_local: boolean;
+}
+
+export interface Tracks {
+  href: string;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  items: Track[];
 }
 
 export interface Track {

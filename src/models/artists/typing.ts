@@ -1,6 +1,16 @@
 import { ExternalUrls, Image } from "../typing";
 import { Followers } from "../user/typing";
 
+export interface Artists {
+  href: string;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  items: Artist[];
+}
+
 export interface SimplifiedArtist {
   external_urls: ExternalUrls;
   href: string;

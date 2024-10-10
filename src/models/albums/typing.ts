@@ -6,8 +6,7 @@ import {
   Restrictions,
 } from "../typing";
 import { SimplifiedArtist } from "../artists/typing";
-import { Tracks } from "../tracks/typing";
-import { StringifyOptions } from "querystring";
+import { SimplifiedTracks } from "../tracks/typing";
 
 export interface UserAlbums {
   href: string;
@@ -39,7 +38,7 @@ export interface Album {
   type: string;
   uri: string;
   artists: SimplifiedArtist[];
-  tracks: Tracks;
+  tracks: SimplifiedTracks;
   copyrights: Copyrights;
   external_ids: ExternalIds;
   genres: string[];

@@ -1,7 +1,7 @@
 import { Album } from "@/models/albums/typing";
 import { Box, Grid, IconButton } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import { SimplifiedTrack, Tracks } from "@/models/tracks/typing";
+import { SimplifiedTrack } from "@/models/tracks/typing";
 import { playTrack } from "@/services/PlayerService";
 
 interface InfosAlbumProps {

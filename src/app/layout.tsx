@@ -11,7 +11,6 @@ import Grid from "@mui/material/Grid2";
 import AlbumIcon from "@mui/icons-material/Album";
 import { usePathname } from "next/navigation";
 import MusicPlayerSlider from "@/components/ui/MusicPlayerSlider";
-import useCurrentlyPlayingTrackData from "./useCurrentlyPlayingTrackData";
 
 const inter = Inter({ subsets: ["latin"] });
 

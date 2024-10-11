@@ -1,5 +1,6 @@
 import { Album } from "@/models/albums/typing";
-import { Box, Grid, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { SimplifiedTrack } from "@/models/tracks/typing";
 import { playTrack } from "@/services/PlayerService";
@@ -29,10 +30,10 @@ const InfosAlbum = ({ album }: InfosAlbumProps) => {
       >
         <Box sx={{ fontWeight: 600, fontSize: 14 }}>{album.name}</Box>
         <div>{album.release_date.slice(0, 4)}</div>
-        <Grid item xs={12} mb={1}>
+        <Grid size={{ xs: 12 }} mb={1}>
           {album.artists[0].name}
         </Grid>
-        <Grid item xs={12} mb={1}>
+        <Grid size={{ xs: 12 }} mb={1}>
           {album.tracks.items.map((track) => (
             <Box key={track.id} display="flex" alignItems="center">
               <IconButton
@@ -45,10 +46,10 @@ const InfosAlbum = ({ album }: InfosAlbumProps) => {
             </Box>
           ))}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <div>{album.label}</div>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <div>{album.album_type}</div>
         </Grid>
         <Box mt={1}>

@@ -6,7 +6,8 @@ import MuiProvider from "@/components/ui/MuiProvider";
 import { ReactNode } from "react";
 import Button from "@/components/ui/Button";
 import Link from "@/components/ui/Link";
-import { Tabs, TabProps as MuiTabProps, Tab, Box, Grid } from "@mui/material";
+import { Tabs, TabProps as MuiTabProps, Tab } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import AlbumIcon from "@mui/icons-material/Album";
 import { usePathname } from "next/navigation";
 import MusicPlayerSlider from "@/components/ui/MusicPlayerSlider";
@@ -128,7 +129,7 @@ export default function RootLayout({
             </Button>
           </div>
           <Grid container>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <Tabs value={tabValue} sx={{ mb: 2 }}>
                 {tabs.map(({ path, label, tab, icon }) => (
                   <TopMenuTab
@@ -141,10 +142,10 @@ export default function RootLayout({
                 ))}
               </Tabs>
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <MusicPlayerSlider />
             </Grid>
-            <Grid item xs={4} />
+            <Grid size={4} />
           </Grid>
           {children}
         </MuiProvider>

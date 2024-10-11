@@ -1,7 +1,7 @@
 import theme from "@/libs/theme/light";
 import { User } from "@/models/user/typing";
 import { imageLoader } from "@/utils/imageLoader";
-import { Box, Grid } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import Image from "next/image";
 
 interface UserProfileProps {
@@ -11,7 +11,7 @@ interface UserProfileProps {
 const UserProfile = ({ user }: UserProfileProps) => {
   return (
     <Grid container>
-      <Grid item xs={6} display="flex" justifyContent="center">
+      <Grid size={6} display="flex" justifyContent="center">
         <Image
           alt="your face"
           loader={() => imageLoader(user.images[1].url, user.images[1].width)}
@@ -22,44 +22,35 @@ const UserProfile = ({ user }: UserProfileProps) => {
           priority
         />
       </Grid>
-      <Grid item xs={6} display="flex" alignItems="center">
+      <Grid size={6} display="flex" alignItems="center">
         <Grid container spacing={2}>
           <Grid
-            item
-            xs={6}
+            size={6}
             display="flex"
             justifyContent="flex-end"
             sx={{ color: theme.palette.primary.main, fontWeight: 700 }}
           >
             Name
           </Grid>
-          <Grid item xs={6}>
-            {user.display_name}
-          </Grid>
+          <Grid size={6}>{user.display_name}</Grid>
           <Grid
-            item
-            xs={6}
+            size={6}
             display="flex"
             justifyContent="flex-end"
             sx={{ color: theme.palette.primary.main, fontWeight: 700 }}
           >
             Mail
           </Grid>
-          <Grid item xs={6}>
-            {user.email}
-          </Grid>
+          <Grid size={6}>{user.email}</Grid>
           <Grid
-            item
-            xs={6}
+            size={6}
             display="flex"
             justifyContent="flex-end"
             sx={{ color: theme.palette.primary.main, fontWeight: 700 }}
           >
             N° of followers
           </Grid>
-          <Grid item xs={6}>
-            {user.followers.total}
-          </Grid>
+          <Grid size={6}>{user.followers.total}</Grid>
         </Grid>
       </Grid>
     </Grid>
